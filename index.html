@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Calculadora Traslado</title>
+
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -20,9 +21,18 @@
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
 
-        h1 {
+        h1, h2 {
             text-align: center;
-            color: #333;
+            color: #003363;
+        }
+
+        h1 {
+            font-size: 1.8em;
+        }
+
+        h2 {
+            font-size: 1.3em;
+            color: #ffc933;
         }
 
         .form-group {
@@ -37,7 +47,7 @@
             margin-right: 10px;
         }
 
-        input[type="tel"] {
+        input[type="tel"], input[readonly] {
             flex: 1;
             width: 100%;
             padding: 10px;
@@ -45,6 +55,10 @@
             border: 1px solid #ccc;
             border-radius: 5px;
             box-sizing: border-box;
+        }
+
+        input[readonly] {
+            background-color: #e9ecef; /* Color de fondo para campos de solo lectura */
         }
 
         .buttons-container {
@@ -122,19 +136,6 @@
             font-weight: bold;
         }
 
-        h1, h2 {
-            text-align: center; /* Centrar títulos */
-            color: #003363; /* Color verde para el texto */
-        }
-
-        h1 {
-            font-size: 1.8em; /* Tamaño de fuente más grande para el título principal */
-        }
-
-        h2 {
-            font-size: 1.3em; /* Tamaño un poco más pequeño para el subtítulo */
-            color: #ffc933; /* Puedes cambiar el color del subtítulo si lo deseas */
-        }
     </style>
 </head>
 <body>
@@ -175,7 +176,7 @@
 
         <div class="form-group">
             <label for="longitudsurco">Longitud de surco (m)</label>
-            <input type="tel" id="longitudsurco" placeholder="0" inputmode="decimal" pattern="[0-9]*[.,]?[0-9]*">
+            <input type="tel" id="longitudsurco" placeholder="0" inputmode="decimal" pattern="[0-9]*[.,]?[0-9]*" oninput="calcularCicloTractor()">
         </div>
 
         <div class="form-group">
@@ -185,27 +186,28 @@
 
         <div class="form-group">
             <label for="tiempollenadovolteos">Tiempo de llenado (min.)</label>
-            <input type="tel" id="tiempollenadovolteos" placeholder="0" inputmode="decimal" pattern="[0-9]*[.,]?[0-9]*">
+            <input type="tel" id="tiempollenadovolteos" placeholder="0" inputmode="decimal" pattern="[0-9]*[.,]?[0-9]*" oninput="calcularCicloTractor()">
         </div>
 
         <div class="form-group">
             <label for="velocidadlleno">Velocidad tractor lleno (km/hr)</label>
-            <input type="tel" id="velocidadlleno" placeholder="0" inputmode="decimal" pattern="[0-9]*[.,]?[0-9]*">
+            <input type="tel" id="velocidadlleno" placeholder="0" inputmode="decimal" pattern="[0-9]*[.,]?[0-9]*" oninput="calcularCicloTractor()">
         </div>
 
         <div class="form-group">
             <label for="tiempodescargue">Tiempo de descargue (min.)</label>
-            <input type="tel" id="tiempodescargue" placeholder="0" inputmode="decimal" pattern="[0-9]*[.,]?[0-9]*">
+            <input type="tel" id="tiempodescargue" placeholder="0" inputmode="decimal" pattern="[0-9]*[.,]?[0-9]*" oninput="calcularCicloTractor()">
         </div>
 
         <div class="form-group">
             <label for="velocidadvacio">Velocidad tractor vacio (km/hr)</label>
-            <input type="tel" id="velocidadvacio" placeholder="0" inputmode="decimal" pattern="[0-9]*[.,]?[0-9]*">
+            <input type="tel" id="velocidadvacio" placeholder="0" inputmode="decimal" pattern="[0-9]*[.,]?[0-9]*" oninput="calcularCicloTractor()">
         </div>
 
+        <!-- Ciclo Tractor calculado automáticamente (solo lectura) -->
         <div class="form-group">
-            <label for="ciclotractor">Ciclo tractor (min.)</label>
-            <input type="tel" id="ciclotractor" placeholder="0" inputmode="decimal" pattern="[0-9]*[.,]?[0-9]*">
+            <label for="ciclotractor">Ciclo tractor (min)</label>
+            <input type="tel" id="ciclotractor" readonly>
         </div>
 
         <div class="buttons-container">
@@ -243,6 +245,25 @@
     </div>
 
     <script>
+        // Función para calcular el ciclo tractor
+        function calcularCicloTractor() {
+            let longitudsurco = parseFloat(document.getElementById("longitudsurco").value) || 0;
+            let velocidadvacio = parseFloat(document.getElementById("velocidadvacio").value) || 0;
+            let velocidadlleno = parseFloat(document.getElementById("velocidadlleno").value) || 0;
+            let tiempollenadovolteos = parseFloat(document.getElementById("tiempollenadovolteos").value) || 0;
+            let tiempodescargue = parseFloat(document.getElementById("tiempodescargue").value) || 0;
+
+            if (velocidadvacio > 0 && velocidadlleno > 0) {
+                let cicloTractor = (((longitudsurco / 1000) * 60) / velocidadvacio) +
+                                   (((longitudsurco / 1000) * 60) / velocidadlleno) +
+                                   tiempollenadovolteos + tiempodescargue;
+
+                document.getElementById("ciclotractor").value = cicloTractor.toFixed(2);
+            } else {
+                document.getElementById("ciclotractor").value = ""; // Vaciar el campo si no hay datos suficientes
+            }
+        }
+
         function calcular() {
             let capacidadVolteos = parseFloat(document.getElementById("capacidadVolteos").value);
             let volteostractor = parseFloat(document.getElementById("volteostractor").value);
@@ -250,8 +271,8 @@
             let espaciosurco = parseFloat(document.getElementById("espaciosurco").value);
             let longitudsurco = parseFloat(document.getElementById("longitudsurco").value);
             let surcoscosechados = parseFloat(document.getElementById("surcoscosechados").value);
-            let ciclotractor = parseFloat(document.getElementById("ciclotractor").value);
             let cosechadoras = parseFloat(document.getElementById("cosechadoras").value);
+            let ciclotractor = parseFloat(document.getElementById("ciclotractor").value);
 
             // Cálculos
             let eficienciaCosechadora = (60 * capacidadVolteos * volteostractor) / tiempollenadovolteos;
@@ -295,7 +316,7 @@
             });
           });
         }
-      </script>
+    </script>
 
 </body>
 </html>
