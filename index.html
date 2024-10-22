@@ -140,8 +140,8 @@
 <body>
 
     <div class="container">
-        <h1>Calculadora Traslado</h1>
-        <h2>Cosecha mecanizada</h2>
+        <h1>Cosecha Mecanizada</h1>
+        <h2>Calculadora de Traslado</h2>
 
         <div class="form-group">
             <label for="cosechadoras">Cosechadoras (Und)</label>
@@ -281,6 +281,7 @@
 
         function cerrarModal() {
             document.getElementById("resultModal").style.display = "none";
+            document.querySelectorAll("input[type=tel]").forEach(input => input.value = "");
         }
     </script>
 
