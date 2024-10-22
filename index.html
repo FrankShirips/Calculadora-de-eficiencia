@@ -24,6 +24,9 @@
         h1, h2 {
             text-align: center;
             color: #003363;
+            background-color: #fff; /* Asegúrate de que el fondo se vea consistente */
+            margin: 0; /* Elimina el margen para que no se solape al hacer scroll */
+            padding: 10px 0; /* Agrega espacio para que se vea bien */
         }
 
         h1 {
@@ -33,6 +36,13 @@
         h2 {
             font-size: 1.3em;
             color: #ffc933;
+        }
+
+        /* Fijar los títulos h1 y h2 en la parte superior */
+        .sticky-header {
+            position: sticky;
+            top: 0;
+            z-index: 1000; /* Asegura que se mantenga por encima de otros elementos */
         }
 
         .form-group {
@@ -141,8 +151,12 @@
 <body>
 
     <div class="container">
-        <h1>Cosecha Mecanizada</h1>
-        <h2>Calculadora de Eficiencia</h2>
+
+        <!-- Contenedor para los títulos con sticky -->
+        <div class="sticky-header">
+            <h1>Cosecha Mecanizada</h1>
+            <h2>Calculadora de Eficiencia</h2>
+        </div>
 
         <div class="form-group">
             <label for="cosechadoras">Cosechadoras (Und)</label>
