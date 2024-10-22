@@ -256,7 +256,7 @@
 
         function reiniciar() {
             // Reiniciar todos los valores a 0
-            document.querySelectorAll("input[type=number]").forEach(input => input.value = 0);
+            document.querySelectorAll("input[type=number]").forEach(input => input.value = "");
 
             // Cerrar el modal si está abierto
             document.getElementById("resultModal").style.display = "none";
@@ -278,7 +278,7 @@
           });
         }
       </script>
-      
+
 </body>
 </html>
 
