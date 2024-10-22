@@ -121,13 +121,27 @@
         .result-group label {
             font-weight: bold;
         }
+
+        h1, h2 {
+            text-align: center; /* Centrar títulos */
+            color: #003363; /* Color verde para el texto */
+        }
+
+        h1 {
+            font-size: 2.5em; /* Tamaño de fuente más grande para el título principal */
+        }
+
+        h2 {
+            font-size: 1.8em; /* Tamaño un poco más pequeño para el subtítulo */
+            color: #ffc933; /* Puedes cambiar el color del subtítulo si lo deseas */
+        }
     </style>
 </head>
 <body>
 
     <div class="container">
         <h1>Calculadora Traslado</h1>
-        <h2>11:29</h2>
+        <h2>Cosecha mecanizada</h2>
 
         <div class="form-group">
             <label for="cosechadoras">Cantidad cosechadoras</label>
@@ -259,7 +273,7 @@
 
         function reiniciar() {
             // Reiniciar todos los valores a 0
-            document.querySelectorAll("input[type=numeric]").forEach(input => input.value = "");
+            document.querySelectorAll("input[type=tel]").forEach(input => input.value = "");
 
             // Cerrar el modal si está abierto
             document.getElementById("resultModal").style.display = "none";
