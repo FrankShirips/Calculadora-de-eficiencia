@@ -147,6 +147,7 @@
         }
 
     </style>
+    <script src="data.js"></script>
 </head>
 <body>
 
@@ -156,6 +157,16 @@
         <div class="sticky-header">
             <h1>Cosecha Mecanizada</h1>
             <h2>Calculadora de Eficiencia</h2>
+        </div>
+
+        <div class="form-group">
+            <label for="hacienda">Hacienda</label>
+            <input type="tel" id="hacienda" placeholder="Ingrese el código de la hacienda" inputmode="numeric" onblur="reemplazarCodigoHacienda()">
+        </div>
+
+        <div class="form-group">
+            <label for="frente">Frente</label>
+            <input type="tel" id="frente" placeholder="0" inputmode="numeric" pattern="[0-9]*[.,]?[0-9]*">
         </div>
 
         <div class="form-group">
@@ -234,6 +245,19 @@
             <div class="modal-content">
                 <span class="close-btn" onclick="cerrarModal()">&times;</span>
                 <h2>Resultados</h2>
+
+                <div class="result-group">
+                    <label>Hacienda:</label>
+                    <span id="nombreHaciendaModal"></span>
+                </div>
+                <div class="result-group">
+                    <label>Frente:</label>
+                    <span id="codigofrente"></span>
+                </div>
+                <div class="result-group">
+                    <label>Area (ha):</label>
+                    <span id="areacosechada"></span>
+                </div>
                 <div class="result-group">
                     <label>Eficiencia Cosechadora (ton/hr):</label>
                     <span id="eficienciaCosechadora"></span>
@@ -254,6 +278,7 @@
                     <label>Potencial Entrega Día (13.5 hr):</label>
                     <span id="potencialEntrega"></span>
                 </div>
+
             </div>
         </div>
     </div>
@@ -287,6 +312,7 @@
             let surcoscosechados = parseFloat(document.getElementById("surcoscosechados").value);
             let cosechadoras = parseFloat(document.getElementById("cosechadoras").value);
             let ciclotractor = parseFloat(document.getElementById("ciclotractor").value);
+            let cfrente = parseFloat(document.getElementById("frente").value);
 
             // Cálculos
             let eficienciaCosechadora = (60 * capacidadVolteos * volteostractor) / tiempollenadovolteos;
@@ -294,13 +320,20 @@
             let eficienciaTractor = (capacidadVolteos * volteostractor) / (ciclotractor / 60);
             let demandaReal = ciclotractor / tiempollenadovolteos;
             let potencialEntrega = cosechadoras * ((60 * capacidadVolteos * volteostractor) / tiempollenadovolteos) * 13.5;
+            let areacosechada = (longitudsurco * surcoscosechados * espaciosurco) / 10000
+            let nombreHaciendaSeleccionada = "";
+            let codfrente = "";
 
-            // Mostrar resultados en la ventana modal
+            // Mostrar resultados en la ventana modal     
+            document.getElementById("nombreHaciendaModal").innerText = document.getElementById("hacienda").value; // Mostrar nombre de la hacienda       
+            document.getElementById("codigofrente").innerText = "F - " + document.getElementById("frente").value;
             document.getElementById("eficienciaCosechadora").innerText = eficienciaCosechadora.toFixed(2);
             document.getElementById("tchCalculado").innerText = tchCalculado.toFixed(2);
             document.getElementById("eficienciaTractor").innerText = eficienciaTractor.toFixed(2);
             document.getElementById("demandaReal").innerText = demandaReal.toFixed(2);
             document.getElementById("potencialEntrega").innerText = potencialEntrega.toFixed(2);
+            document.getElementById("areacosechada").innerText = areacosechada.toFixed(2);
+     
 
             // Abrir el modal
             document.getElementById("resultModal").style.display = "block";
@@ -320,6 +353,21 @@
         }
     </script>
 
+    <script>
+        function reemplazarCodigoHacienda() {
+        const inputHacienda = document.getElementById("hacienda");
+        const codigo = inputHacienda.value.trim();
+        const nombreHacienda = obtenerNombreHacienda(codigo);
+        
+        if (nombreHacienda) {
+            inputHacienda.value = nombreHacienda;
+            nombreHaciendaSeleccionada = nombreHacienda; // Guardamos el nombre de la hacienda seleccionada
+        } else {
+            alert("Código de hacienda no encontrado.");
+        }
+    }
+    </script>
+    
     <script>
         if ('serviceWorker' in navigator) {
           window.addEventListener('load', () => {
